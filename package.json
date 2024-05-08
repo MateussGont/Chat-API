@@ -1,0 +1,25 @@
+{
+  "name": "chatapi",
+  "version": "1.0.0",
+  "description": "api para chat irt",
+  "main": "index.js",
+  "scripts": {
+    "test": "test-run"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/MateussGont/Chat-API.git"
+  },
+  "keywords": [
+    "api"
+  ],
+  "author": "MateusSGont",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/MateussGont/Chat-API/issues"
+  },
+  "homepage": "https://github.com/MateussGont/Chat-API#readme",
+  "dependencies": {
+    "express": "^4.19.2"
+  }
+}
