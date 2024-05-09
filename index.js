@@ -5,6 +5,7 @@ app.use(express.json());
 let users = [];
 let sessions = [];
 let messages = [];
+let roomId = 1;
 
 // Gerenciar usuários
 let userId = 1;
