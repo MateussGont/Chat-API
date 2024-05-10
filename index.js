@@ -217,11 +217,12 @@ app.post('/rooms/:roomId/messages', (req, res) => {
     res.status(201).send(message);
 });
 
+//recebe Mensagens de uma sala
 app.get('/rooms/:roomId/messages', (req, res) => {
     const roomId = req.params.roomId;
 
     // Verificações
-    const user = users.find(u => u.id === Number(req.body.id));
+    const user = users.find(u => u.id === Number(req.body.userId));
     if (!user || !user.isLoggedIn) {
         return res.status(403).send({ message: 'Usuário não autenticado.' });
     }
