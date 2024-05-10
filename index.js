@@ -5,6 +5,7 @@ app.use(express.json());
 let users = [];
 let sessions = [];
 let messages = {};
+let directMessages = [];
 let roomId = 1;
 let userId = 1;
 
@@ -40,7 +41,7 @@ app.post('/users/:userId/admin', (req, res) => {
     res.status(200).send({ message: 'Usuário agora é um administrador.' });
 });
 
-//Retorna um User pelo userId
+//Retorna um User pelo userId ou pelo nickname
 app.get('/users/:userId', (req, res) => {
     const user = users.find(u => u.id === Number(req.params.userId));
     if (!user) {
@@ -78,29 +79,29 @@ app.get('/rooms', (req, res) => {
 app.post('/rooms', (req, res) => {
 
     const user = req.body;
-    const roomName = String(req.params.roomName);
-
     // Verificações
     const existingUser = users.find(u => u.login === user.login && u.isLoggedIn);
     if (!existingUser) {
-        return res.status(401).send({ message: 'Usuário não está autenticado.' });
+        return res.status(401).send({ message: 'Usuário não está autenticado' });
     }
 
     // Criar uma nova sala
-    const room = { roomName: roomName, id: roomId++, users: [] };
+    const room = { roomName: req.body.roomName, id: roomId++, users: [] };
     sessions.push(room);
+    messages[room.id] = [];
     res.status(201).send(room);
 });
 
 //Apaga uma sala do array
 app.delete('/rooms/:roomId', (req, res) => {
 
+    const user = req.body;
     //Verificações
-    const user = users.find(u => u.login === user.login && u.isLoggedIn);
-    if (!user) {
-        return res.status(401).send({ message: 'Usuário não está autenticado.' });
+    const existingUser = users.find(u => u.login === user.login && u.isLoggedIn);
+    if (!existingUser) {
+        return res.status(401).send({ message: 'Usuário não está autenticado ou inconsistente' });
     }
-    if (!user.isAdmin) {
+    if (!existingUser.isAdmin) {
         return res.status(403).send({ message: 'Apenas administradores podem excluir salas.' });
     }
     const index = sessions.findIndex(room => room.id === Number(req.params.roomId));
@@ -127,6 +128,10 @@ app.post('/rooms/:roomId/enter', (req, res) => {
     }
     if (room.users.find(u => u.id === user.id)) {
         return res.status(400).send({ message: 'Usuário já está na sala.' });
+    }
+    const existingUser = users.find(u => u.login === user.login && u.isLoggedIn);
+    if (!existingUser || user.id != existingUser.id) {
+        return res.status(401).send({ message: 'Usuário não está autenticado ou inconsistente' });
     }
 
     room.users.push(user);
@@ -177,9 +182,17 @@ app.delete('/rooms/:roomId/users/:userId', (req, res) => {
 //Gerenciar Mensagens
 // Enviar uma mensagem direta para outro usuário
 app.post('/messages/direct/:receiverId', (req, res) => {
-    const message = req.body;
+    const message = req.body.message;
+    const user = users.find(u => u.id === req.body.senderId);
+    if (!user || !user.isLoggedIn) {
+        return res.status(403).send({ message: 'Usuário não está autenticado.' });
+    }
+    const receiver = users.find(u => u.id === Number(req.params.receiverId))
+    if (!receiver) {
+        return res.status(404).send({ message: 'Remetente não Encontrado.' });
+    }
     message.receiverId = req.params.receiverId;
-    messages.push(message);
+    directMessages.push(message);
     res.status(201).send(message);
 });
 
@@ -192,7 +205,7 @@ app.post('/rooms/:roomId/messages', (req, res) => {
     // Adicionar o nickname do usuário à mensagem
     const user = users.find(u => u.id === message.senderId);
     if (user) {
-        message.nickname = user.login;
+        message.nickname = user.nickname;
     }
 
     // Adicionar a mensagem ao histórico da sala
@@ -204,9 +217,20 @@ app.post('/rooms/:roomId/messages', (req, res) => {
     res.status(201).send(message);
 });
 
-// Receber mensagens de uma sala de chat
 app.get('/rooms/:roomId/messages', (req, res) => {
     const roomId = req.params.roomId;
+
+    // Verificações
+    const user = users.find(u => u.id === Number(req.body.id));
+    if (!user || !user.isLoggedIn) {
+        return res.status(403).send({ message: 'Usuário não autenticado.' });
+    }
+    const room = sessions.find(r => r.id === roomId);
+    if (!room || !room.users.find(u => u.id === user.id)) {
+        return res.status(403).send({ message: 'Usuário não está na sala.' });
+    }
+
+    //Recebe as mensagens
     const roomMessages = messages[roomId] || [];
     res.send(roomMessages);
 });
@@ -215,13 +239,14 @@ app.get('/rooms/:roomId/messages', (req, res) => {
 app.get('/rooms/messages', (req, res) => {
 
     const user = users.find(u => u.id === Number(req.body.userId));
-    if (!user) {
-        return res.status(404).send({ message: 'Usuário não encontrado.' });
+    if (!user || !user.isLoggedIn) {
+        return res.status(403).send({ message: 'Usuário não autenticado.' });
     }
     if (!user.isAdmin) {
-        return res.status(403).send({ message: 'Apenas administradores podem excluir salas.' });
+        return res.status(403).send({ message: 'Apenas administradores podem receber todas as mensagens.' });
     }
-    res.send(messages);
+
+    res.status(200).send(messages);
 })
 
 app.listen(3000, () => console.log('Chat API is running on port 3000'));
