@@ -18,6 +18,7 @@ app.post('/users', (req, res) => {
     const user = req.body;
     user.id = userId++;
     user.isAdmin = false; // por padrão os usuários não são admins
+    user.isLoggedIn = false; // usuários não são logados
 
     const existingUser = users.find(u => u.login === user.login);
     if (existingUser) {
@@ -41,7 +42,7 @@ app.post('/users/:userId/admin', (req, res) => {
     res.status(200).send({ message: 'Usuário agora é um administrador.' });
 });
 
-//Retorna um User pelo userId ou pelo nickname
+//Retorna um User pelo userId
 app.get('/users/:userId', (req, res) => {
     const user = users.find(u => u.id === Number(req.params.userId));
     if (!user) {
@@ -63,6 +64,9 @@ app.post('/users/login', (req, res) => {
     if (user.password !== password) {
         return res.status(401).send({ message: 'Senha incorreta.' });
     }
+    if (user.isLoggedIn != true) {
+        return res.status(401).send({ message: 'Usuário Já Logado' });
+    }
 
     // Se o usuário & senha = true =>
     user.isLoggedIn = true;
@@ -78,11 +82,14 @@ app.get('/rooms', (req, res) => {
 // Criar uma nova sala com id 
 app.post('/rooms', (req, res) => {
 
-    const user = req.body;
+    const request = req.body;
     // Verificações
-    const existingUser = users.find(u => u.login === user.login && u.isLoggedIn);
-    if (!existingUser) {
-        return res.status(401).send({ message: 'Usuário não está autenticado' });
+    const user = users.find(u => u.login === request.login);
+    if (!user) {
+        return res.status(404).send({ message: 'Usuário não encontrado' });
+    }
+    if (!user.isLoggedIn) {
+        return res.status(401).send({ message: 'Usuário não autenticado' });
     }
 
     // Criar uma nova sala
@@ -95,13 +102,16 @@ app.post('/rooms', (req, res) => {
 //Apaga uma sala do array
 app.delete('/rooms/:roomId', (req, res) => {
 
-    const user = req.body;
+    const request = req.body;
     //Verificações
-    const existingUser = users.find(u => u.login === user.login && u.isLoggedIn);
-    if (!existingUser) {
-        return res.status(401).send({ message: 'Usuário não está autenticado ou inconsistente' });
+    const user = users.find(u => u.login === request.login);
+    if (!user) {
+        return res.status(404).send({ message: 'Usuário não encontrado' });
     }
-    if (!existingUser.isAdmin) {
+    if (!user.isLoggedIn) {
+        return res.status(401).send({ message: 'Usuário não autenticado' });
+    }
+    if (!user.isAdmin) {
         return res.status(403).send({ message: 'Apenas administradores podem excluir salas.' });
     }
     const index = sessions.findIndex(room => room.id === Number(req.params.roomId));
@@ -119,19 +129,22 @@ app.delete('/rooms/:roomId', (req, res) => {
 app.post('/rooms/:roomId/enter', (req, res) => {
 
     const roomId = Number(req.params.roomId);
-    const user = req.body;
+    const request = req.body;
 
     //Verificações
     const room = sessions.find(r => r.id === roomId);
     if (!room) {
         return res.status(404).send({ message: 'Sala não encontrada.' });
     }
-    if (room.users.find(u => u.id === user.id)) {
+    if (room.users.find(u => u.id === request.id)) {
         return res.status(400).send({ message: 'Usuário já está na sala.' });
     }
-    const existingUser = users.find(u => u.login === user.login && u.isLoggedIn);
-    if (!existingUser || user.id != existingUser.id) {
-        return res.status(401).send({ message: 'Usuário não está autenticado ou inconsistente' });
+    const user = users.find(u => u.login === request.login);
+    if (!user) {
+        return res.status(404).send({ message: 'Usuário não encontrado' });
+    }
+    if (user.isLoggedIn != true) {
+        return res.status(401).send({ message: 'Usuário não autenticado' });
     }
 
     room.users.push(user);
@@ -184,8 +197,11 @@ app.delete('/rooms/:roomId/users/:userId', (req, res) => {
 app.post('/messages/direct/:receiverId', (req, res) => {
     const message = req.body.message;
     const user = users.find(u => u.id === req.body.senderId);
-    if (!user || !user.isLoggedIn) {
-        return res.status(403).send({ message: 'Usuário não está autenticado.' });
+    if (!user) {
+        return res.status(404).send({ message: 'Usuário não encontrado.' });
+    }
+    if (!user.isLoggedIn) {
+        return res.status(401).send({ message: 'Usuário não autenticado' });
     }
     const receiver = users.find(u => u.id === Number(req.params.receiverId))
     if (!receiver) {
