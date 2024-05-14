@@ -64,7 +64,7 @@ app.post('/users/login', (req, res) => {
     if (user.password !== password) {
         return res.status(401).send({ message: 'Senha incorreta.' });
     }
-    if (user.isLoggedIn != true) {
+    if (user.isLoggedIn != false) {
         return res.status(401).send({ message: 'Usuário Já Logado' });
     }
 
