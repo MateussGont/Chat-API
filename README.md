@@ -22,6 +22,20 @@ Aqui estão algumas das rotas disponíveis no sistema de chat:
         "password": "senhaExemplo"
     }
     ```
+    - Exemplo de resposta bem sucedida:
+    ```json
+    {
+        "login": "Teuza",
+        "password": "123",
+        "nickname": "tza",
+        "id": 1,
+        "isAdmin": false,
+        "isLoggedIn": false
+    }
+    ```
+    - Status:
+        -400 {'message: Login em Uso'}
+
 - `POST /users/login`: Autenticar um usuário.
     - Exemplo de requisição: 
     ```json
