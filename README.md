@@ -34,7 +34,7 @@ Aqui estão algumas das rotas disponíveis no sistema de chat:
         }
     ]
     ```
-**- `POST /users`: Registrar um novo usuário.**
+- `POST /users`: Registrar um novo usuário.
     - Exemplo de requisição: 
     ```json
     {
@@ -42,7 +42,7 @@ Aqui estão algumas das rotas disponíveis no sistema de chat:
         "password": "senhaExemplo"
     }
     ```
-    - Retorno: Retorna o usuário criado. Se o login já estiver em uso, retorna um erro 400 com a mensagem 'O login já está em uso.'.
+    - Retorno: Retorna o usuário criado.  400 com a mensagem 'O login já está em uso.'.
     - Exemplo de resposta: 
     ```json
     {
@@ -53,6 +53,7 @@ Aqui estão algumas das rotas disponíveis no sistema de chat:
         "isLoggedIn": false
     }
     ```
+    - Erro 400: 'O login já está em uso.'
 - `POST /users/:userId/admin`: Torna um usuário administrador.
     - Retorno: Retorna uma mensagem de sucesso. Se o usuário não for encontrado, retorna um erro 404.
     - Exemplo de resposta: 
