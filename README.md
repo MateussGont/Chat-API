@@ -84,7 +84,7 @@ Aqui estão algumas das rotas disponíveis no sistema de chat:
 1. Clone este repositório.
 2. Navegue até a pasta do repositório no terminal.
 3. Execute `npm install` para instalar as dependências.
-4. Execute `node app.js` para iniciar o servidor.
+4. Execute `node index.js` para iniciar o servidor.
 5. O servidor estará rodando em `http://localhost:3000`.
 
 ## Contribuições
