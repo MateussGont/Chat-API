@@ -34,7 +34,7 @@ Aqui estão algumas das rotas disponíveis no sistema de chat:
         }
     ]
     ```
-- `POST /users`: Registrar um novo usuário.
+**- `POST /users`: Registrar um novo usuário.**
     - Exemplo de requisição: 
     ```json
     {
