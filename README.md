@@ -53,7 +53,6 @@ Aqui estão algumas das rotas disponíveis no sistema de chat:
         "isLoggedIn": false
     }
     ```
-    - Erro 400: 'O login já está em uso.'
 - `POST /users/:userId/admin`: Torna um usuário administrador.
     - Retorno: Retorna uma mensagem de sucesso. Se o usuário não for encontrado, retorna um erro 404.
     - Exemplo de resposta: 
