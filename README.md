@@ -15,7 +15,7 @@ O sistema de chat suporta as seguintes funcionalidades:
 Aqui estão algumas das rotas disponíveis no sistema de chat:
 
 #### `GET /users`: Retorna todos os usuários.
-    - Exemplo de resposta: 
+- Exemplo de resposta: 
     ```json
     [
         {
@@ -34,15 +34,15 @@ Aqui estão algumas das rotas disponíveis no sistema de chat:
         }
     ]
     ```
-- `POST /users`: Registrar um novo usuário.
-    - Exemplo de requisição: 
+#### `POST /users`: Registrar um novo usuário.
+- Exemplo de requisição: 
     ```json
     {
         "login": "usuarioExemplo",
         "password": "senhaExemplo"
     }
     ```
-    - Retorno: Retorna o usuário criado.  400 com a mensagem 'O login já está em uso.'.
+- Retorno: Retorna o usuário criado.  400 com a mensagem 'O login já está em uso.'.
     - Exemplo de resposta: 
     ```json
     {
@@ -53,16 +53,16 @@ Aqui estão algumas das rotas disponíveis no sistema de chat:
         "isLoggedIn": false
     }
     ```
-- `POST /users/:userId/admin`: Torna um usuário administrador.
-    - Retorno: Retorna uma mensagem de sucesso. Se o usuário não for encontrado, retorna um erro 404.
+#### `POST /users/:userId/admin`: Torna um usuário administrador.
+- Retorno: Retorna uma mensagem de sucesso. Se o usuário não for encontrado, retorna um erro 404.
     - Exemplo de resposta: 
     ```json
     {
         "message": "Usuário agora é um administrador."
     }
     ```
-- `GET /users/:userId`: Obter informações de um usuário específico.
-    - Retorno: Retorna as informações do usuário. Se o usuário não for encontrado, retorna um erro 404.
+#### `GET /users/:userId`: Obter informações de um usuário específico.
+- Retorno: Retorna as informações do usuário. Se o usuário não for encontrado, retorna um erro 404.
     - Exemplo de resposta: 
     ```json
     {
@@ -73,23 +73,23 @@ Aqui estão algumas das rotas disponíveis no sistema de chat:
         "isLoggedIn": false
     }
     ```
-- `POST /users/login`: Autenticar um usuário.
-    - Exemplo de requisição: 
+#### `POST /users/login`: Autenticar um usuário.
+- Exemplo de requisição: 
     ```json
     {
         "login": "usuarioExemplo",
         "password": "senhaExemplo"
     }
     ```
-    - Retorno: Se o login e a senha estiverem corretos, retorna uma mensagem de sucesso. Se o usuário não for encontrado, retorna um erro 404. Se a senha estiver incorreta, retorna um erro 401. Se o usuário já estiver logado, retorna um erro 401 com a mensagem 'Usuário Já Logado'.
+- Retorno: Se o login e a senha estiverem corretos, retorna uma mensagem de sucesso. Se o usuário não for encontrado, retorna um erro 404. Se a senha estiver incorreta, retorna um erro 401. Se o usuário já estiver logado, retorna um erro 401 com a mensagem 'Usuário Já Logado'.
     - Exemplo de resposta: 
     ```json
     {
         "message": "Login efetuado com sucesso."
     }
     ```
-- `GET /rooms`: Retorna todas as salas de chat.
-    - Exemplo de resposta: 
+#### `GET /rooms`: Retorna todas as salas de chat.
+- Exemplo de resposta: 
     ```json
     [
         {
@@ -112,8 +112,8 @@ Aqui estão algumas das rotas disponíveis no sistema de chat:
         }
     ]
     ```
-- `POST /rooms`: Criar uma nova sala de chat.
-    - Exemplo de requisição: 
+#### `POST /rooms`: Criar uma nova sala de chat.
+- Exemplo de requisição: 
     ```json
     {
         "login": "usuarioExemplo",
@@ -121,7 +121,7 @@ Aqui estão algumas das rotas disponíveis no sistema de chat:
         "roomName": "nomeDaSala"
     }
     ```
-    - Retorno: Retorna a sala de chat criada. Se o usuário não estiver autenticado, retorna um erro 401. Se o usuário não for encontrado, retorna um erro 404.
+ - Retorno: Retorna a sala de chat criada. Se o usuário não estiver autenticado, retorna um erro 401. Se o usuário não for encontrado, retorna um erro 404.
     - Exemplo de resposta: 
     ```json
     {
@@ -130,22 +130,22 @@ Aqui estão algumas das rotas disponíveis no sistema de chat:
         "users": []
     }
     ```
-- `DELETE /rooms/{roomId}`: Remover uma sala de chat.
-    - Exemplo de requisição: 
+#### `DELETE /rooms/{roomId}`: Remover uma sala de chat.
+- Exemplo de requisição: 
     ```json
     {
         "login": "usuarioExemplo"
     }
     ```
-    - Retorno: Retorna uma mensagem de sucesso. Se a sala não for encontrada, retorna um erro 404. Se o usuário não for um administrador, retorna um erro 403. Se o usuário não estiver autenticado, retorna um erro 401. Se o usuário não for encontrado, retorna um erro 404.
+- Retorno: Retorna uma mensagem de sucesso. Se a sala não for encontrada, retorna um erro 404. Se o usuário não for um administrador, retorna um erro 403. Se o usuário não estiver autenticado, retorna um erro 401. Se o usuário não for encontrado, retorna um erro 404.
     - Exemplo de resposta: 
     ```json
     {
         "message": "Sala removida com sucesso."
     }
     ```
-- `POST /rooms/{roomId}/enter`: Entrar em uma sala de chat.
-    - Exemplo de requisição: 
+#### `POST /rooms/{roomId}/enter`: Entrar em uma sala de chat.
+- Exemplo de requisição: 
     ```json
     {
         "id": 1,
@@ -160,8 +160,8 @@ Aqui estão algumas das rotas disponíveis no sistema de chat:
         "message": "Usuário entrou na sala com sucesso."
     }
     ```
-- `POST /rooms/{roomId}/leave`: Sair de uma sala de chat.
-    - Exemplo de requisição: 
+#### `POST /rooms/{roomId}/leave`: Sair de uma sala de chat.
+- Exemplo de requisição: 
     ```json
     {
         "id": 1,
@@ -169,23 +169,23 @@ Aqui estão algumas das rotas disponíveis no sistema de chat:
         "isLoggedIn": true
     }
     ```
-    - Retorno: Retorna uma mensagem de sucesso. Se a sala não for encontrada, retorna um erro 404. Se o usuário não estiver na sala, retorna um erro 400.
+- Retorno: Retorna uma mensagem de sucesso. Se a sala não for encontrada, retorna um erro 404. Se o usuário não estiver na sala, retorna um erro 400.
     - Exemplo de resposta: 
     ```json
     {
         "message": "Usuário saiu da sala com sucesso."
     }
     ```
-- `DELETE /rooms/{roomId}/users/{userId}`: Remover um usuário de uma sala específica.
-    - Retorno: Retorna uma mensagem de sucesso. Se a sala não for encontrada, retorna um erro 404. Se o usuário não estiver na sala, retorna um erro 400.
+#### `DELETE /rooms/{roomId}/users/{userId}`: Remover um usuário de uma sala específica.
+- Retorno: Retorna uma mensagem de sucesso. Se a sala não for encontrada, retorna um erro 404. Se o usuário não estiver na sala, retorna um erro 400.
     - Exemplo de resposta: 
     ```json
     {
         "message": "Usuário removido da sala com sucesso."
     }
     ```
-- `POST /messages/direct/{receiverId}`: Enviar uma mensagem direta para outro usuário.
-    - Exemplo de requisição: 
+#### `POST /messages/direct/{receiverId}`: Enviar uma mensagem direta para outro usuário.
+- Exemplo de requisição: 
     ```json
     {
         "senderId": 1,
@@ -201,15 +201,15 @@ Aqui estão algumas das rotas disponíveis no sistema de chat:
         "message": "Olá, tudo bem?"
     }
     ```
-- `POST /rooms/{roomId}/messages`: Enviar uma mensagem para uma sala de chat.
-    - Exemplo de requisição: 
+#### `POST /rooms/{roomId}/messages`: Enviar uma mensagem para uma sala de chat.
+- Exemplo de requisição: 
     ```json
     {
         "senderId": 1,
         "message": "Olá, pessoal!"
     }
     ```
-    - Retorno: Retorna a mensagem enviada.
+- Retorno: Retorna a mensagem enviada.
     - Exemplo de resposta: 
     ```json
     {
@@ -218,14 +218,14 @@ Aqui estão algumas das rotas disponíveis no sistema de chat:
         "message": "Olá, pessoal!"
     }
     ```
-- `GET /rooms/{roomId}/messages`: Receber mensagens de uma sala de chat.
-    - Exemplo de requisição: 
+#### `GET /rooms/{roomId}/messages`: Receber mensagens de uma sala de chat.
+ - Exemplo de requisição: 
     ```json
     {
         "userId": 1
     }
     ```
-    - Retorno: Retorna todas as mensagens da sala de chat. Se o usuário não estiver autenticado, retorna um erro 403. Se o usuário não estiver na sala, retorna um erro 403.
+- Retorno: Retorna todas as mensagens da sala de chat. Se o usuário não estiver autenticado, retorna um erro 403. Se o usuário não estiver na sala, retorna um erro 403.
     - Exemplo de resposta: 
     ```json
     [
