@@ -236,13 +236,14 @@ app.post('/rooms/:roomId/messages', (req, res) => {
 //recebe Mensagens de uma sala
 app.get('/rooms/:roomId/messages', (req, res) => {
     const roomId = req.params.roomId;
+    const userId = req.body.userId;
 
     // Verificações
     const user = users.find(u => u.id === Number(req.body.userId));
     if (!user || !user.isLoggedIn) {
         return res.status(403).send({ message: 'Usuário não autenticado.' });
     }
-    const room = sessions.find(r => r.id === roomId);
+    const room = sessions.find(r => r.id === Number(req.params.roomId));
     if (!room || !room.users.find(u => u.id === user.id)) {
         return res.status(403).send({ message: 'Usuário não está na sala.' });
     }
