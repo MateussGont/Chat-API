@@ -87,9 +87,6 @@ Aqui estão algumas das rotas disponíveis no sistema de chat:
 4. Execute `node index.js` para iniciar o servidor.
 5. O servidor estará rodando em `http://localhost:3000`.
 
-## Contribuições
-
-Contribuições são bem-vindas! Por favor, leia as diretrizes de contribuição antes de enviar uma pull request.
 
 ## Licença
 
