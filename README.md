@@ -14,7 +14,7 @@ O sistema de chat suporta as seguintes funcionalidades:
 
 Aqui estão algumas das rotas disponíveis no sistema de chat:
 
-- `GET /users`: Retorna todos os usuários.
+- *`GET /users`: Retorna todos os usuários.*
     - Exemplo de resposta: 
     ```json
     [
