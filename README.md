@@ -1,6 +1,6 @@
 # Sistema de Chat
 
-Este é um sistema de chat simples construído com Node.js e Express.
+Este é uma API de chat simples construído com Node.js e Express.
 
 ## Funcionalidades
 
